@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import pdfplumber
 
 
-pdf_path = pdf_path = r"C:\Users\aalee\programming-python\pdf\ddr3.pdf"
+pdf_path = r"ddr3.pdf"
 
 def plot_table_tabula():
     dfs = tabula.read_pdf(pdf_path, pages='all')
