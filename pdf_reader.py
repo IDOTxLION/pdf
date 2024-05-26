@@ -2,6 +2,7 @@
 #have java installed
 #pip install tabula-py
 #pip install JPype1
+#pip install pdfplumber
 import tabula
 import pandas as pd
 import matplotlib.pyplot as plt
