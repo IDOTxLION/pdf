@@ -146,7 +146,14 @@ def CleanData(cat):
     except ValueError:
         return data  # Return the original list if cat is not found
 
-
+def AllInfo():
+        results = []
+        data1=CleanData("Symbol")
+        data2=CleanData("MIN")
+        data3=CleanData("MAX")
+        for d1, d2, d3 in zip(data1, data2, data3):
+            results.append(f"{d1}: {d2} {d3}")
+        return results
 if __name__ == '__main__':
     start = time.perf_counter() 
     tables_with_context = extract_tables_plumber(pdf_path)
@@ -159,11 +166,14 @@ if __name__ == '__main__':
     table_data = table["Table"].iloc[0].extract()
     # for i ,p in enumerate(table_data):
     #     print(i,p)
-
-    data1 = CleanData("Symbol")
-    data2 = CleanData("MIN")
-    for d1,d2 in zip(data1,data2):
-       print(d1,":",d2)
+    
+    for line in AllInfo():
+        print(line)   
+    
+    # data1 = CleanData("Symbol")
+    # data2 = CleanData("MIN")
+    # for d1,d2 in zip(data1,data2):
+    #    print(d1,":",d2)
     #print(data)
    
     finish = time.perf_counter()
