@@ -16,7 +16,7 @@ from concurrent.futures import ThreadPoolExecutor
 import os
 import time
 #endregion
-pdf_path = r"ddr3.pdf"
+pdf_path = r"ddr4.pdf"
 #region singular core extracts
 def extract_tables_plumber(pdf_path):
 
@@ -81,7 +81,7 @@ def extract_tables_multiprocessingC(pdf_path):
             tables_with_context.append((name, table.df))
     return tables_with_context
 #endregion
-#region original Inex Extract for debugging purposes
+#region original  Extract for debugging purposes
 def ExtractDesiredIndex1(cat):
     indices = []
     for i, inner_list in enumerate(table_data):
@@ -157,18 +157,20 @@ def AllInfo():
 if __name__ == '__main__':
     start = time.perf_counter() 
     tables_with_context = extract_tables_plumber(pdf_path)
+    for table in tables_with_context:
+        print(table)
     # Create a DataFrame from the list of tuples
-    df = pd.DataFrame(tables_with_context, columns=["Table Name", "Table"])
-    specific_table_name = "Timing Parameters by Speed Bin"
+    # df = pd.DataFrame(tables_with_context, columns=["Table Name", "Table"])
+    # specific_table_name = "Timing Parameters by Speed Bin"
 
-    #find the table with the specific name
-    table = df[df["Table Name"] == specific_table_name]
-    table_data = table["Table"].iloc[0].extract()
+    # #find the table with the specific name
+    # table = df[df["Table Name"] == specific_table_name]
+    # table_data = table["Table"].iloc[0].extract()
     # for i ,p in enumerate(table_data):
     #     print(i,p)
     
-    for line in AllInfo():
-        print(line)   
+    # for line in AllInfo():
+    #     print(line)   
     
     # data1 = CleanData("Symbol")
     # data2 = CleanData("MIN")
