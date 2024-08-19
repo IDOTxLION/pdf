@@ -154,17 +154,43 @@ def CleanData(cat):
 #endregion
 #region tableofchoice
 def FilterTable(table_data): #filters anything that doesnt start with Table
-        removeTablenames = table_data[table_data['tablename'].str.startswith('Table')].reset_index()
+        removeTablenames = table_data[table_data['tablename'].str.startswith('Table')]
         resetIndex = removeTablenames.reset_index(drop=True)
-        
         return resetIndex
-        
+def UserChoice(table_data):
+    while True:
+        print(table_data)
+        try:
+            chosen_table = input(f"Choose an option (0-{len(table_data) - 1}) or press 'z' to exit: ")
+            if chosen_table.lower() == 'z':
+                print("Exiting the selection.")
+                break
+            chosen_table = int(chosen_table)
+            if 0 <= chosen_table < len(table_data):
+                print(table_data['tabledata'][chosen_table])
+                choice = input("Press 'b' to go back to the table selection or 'z' to exit: ").lower()
+                if choice == 'z':
+                    print("Exiting the selection.")
+                    break
+                elif choice != 'b':
+                    print("Invalid input. Returning to table selection.")
+            else:
+                print(f"Invalid choice. Please choose a number between 0 and {len(table_data) - 1}.")
+        except ValueError:
+            print("Invalid input. Please enter a number or 'z' to exit.")
+
+
+
+
+    
+
 #endregion
 if __name__ == '__main__':
     start = time.perf_counter() 
     table_data = extract_tables_plumber(pdf_path)
     table_data = FilterTable(table_data)
-    print(table_data['tablename'])
+    UserChoice(table_data)
+  
     
     # Create a DataFrame from the list of tuples
     # df = pd.DataFrame(tables_with_context, columns=["Table Name", "Table"])
