@@ -159,7 +159,7 @@ def FilterTable(table_data): #filters anything that doesnt start with Table
         return resetIndex
 def UserChoice(table_data):
     while True:
-        print(table_data)
+        print(table_data['tablename'])
         try:
             chosen_table = input(f"Choose an option (0-{len(table_data) - 1}) or press 'z' to exit: ")
             if chosen_table.lower() == 'z':
@@ -167,7 +167,12 @@ def UserChoice(table_data):
                 break
             chosen_table = int(chosen_table)
             if 0 <= chosen_table < len(table_data):
-                print(table_data['tabledata'][chosen_table])
+                selected_table = table_data['tabledata'][chosen_table]
+                table_name = table_data['tablename'][chosen_table]
+                selected_table = selected_table.extract()
+                print(table_name)
+                for row in selected_table:
+                    print(row)
                 choice = input("Press 'b' to go back to the table selection or 'z' to exit: ").lower()
                 if choice == 'z':
                     print("Exiting the selection.")
