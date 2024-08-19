@@ -15,12 +15,16 @@ from multiprocessing import Pool, cpu_count
 from concurrent.futures import ThreadPoolExecutor
 import os
 import time
+pd.set_option("display.max_columns", None)  
+pd.set_option("display.max_rows", None)
+pd.set_option('display.width', None)
+pd.set_option('display.max_colwidth', None)
 #endregion
 pdf_path = r"ddr4.pdf"
 #region singular core extracts
 def extract_tables_plumber(pdf_path):
 
-    tables_with_context = []
+    tables_with_context = {}
     
     with pdfplumber.open(pdf_path) as pdf:
         
@@ -36,8 +40,10 @@ def extract_tables_plumber(pdf_path):
                     name = previous_line['text']
                 else:
                     name = "Unknown"
-                tables_with_context.append((name, table))
-    return tables_with_context
+                tables_with_context[name] = table
+    table_data = pd.DataFrame.from_dict(tables_with_context,orient="index").reset_index()
+    table_data.columns = ['tablename', 'tabledata']
+    return table_data
 def extract_tables_pymupdf(pdf_path):
     tables_with_context = []
     
@@ -98,7 +104,7 @@ def ExtractDataOfCat1(cat):
         data.append(innerList[index])
     return data
 #endregion
-
+#region extract for specific word
 def ExtractDesiredIndex(cat):
     indices = []
     label = []
@@ -145,20 +151,21 @@ def CleanData(cat):
         return data[index + 1:]  # Return elements after the index of cat
     except ValueError:
         return data  # Return the original list if cat is not found
-
-def AllInfo():
-        results = []
-        data1=CleanData("Symbol")
-        data2=CleanData("MIN")
-        data3=CleanData("MAX")
-        for d1, d2, d3 in zip(data1, data2, data3):
-            results.append(f"{d1}: {d2} {d3}")
-        return results
+#endregion
+#region tableofchoice
+def FilterTable(table_data): #filters anything that doesnt start with Table
+        removeTablenames = table_data[table_data['tablename'].str.startswith('Table')].reset_index()
+        resetIndex = removeTablenames.reset_index(drop=True)
+        
+        return resetIndex
+        
+#endregion
 if __name__ == '__main__':
     start = time.perf_counter() 
-    tables_with_context = extract_tables_plumber(pdf_path)
-    for table in tables_with_context:
-        print(table)
+    table_data = extract_tables_plumber(pdf_path)
+    table_data = FilterTable(table_data)
+    print(table_data['tablename'])
+    
     # Create a DataFrame from the list of tuples
     # df = pd.DataFrame(tables_with_context, columns=["Table Name", "Table"])
     # specific_table_name = "Timing Parameters by Speed Bin"
