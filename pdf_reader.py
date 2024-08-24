@@ -4,7 +4,8 @@
 #pip install tabula-py
 #pip install JPype1
 #pip install pdfplumber
-import pymupdf
+#pip install "camelot-py[base]"
+#import pymupdf
 import camelot
 import tabula
 import pandas as pd
